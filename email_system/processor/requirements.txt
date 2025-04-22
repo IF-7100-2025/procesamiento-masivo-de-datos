@@ -1,0 +1,2 @@
+kafka-python
+python-dotenv  # Opcional para manejar variables de entorno
