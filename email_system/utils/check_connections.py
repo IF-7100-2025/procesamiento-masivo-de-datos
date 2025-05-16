@@ -48,26 +48,39 @@ def check_connections():
 
 if __name__ == "__main__":
     check_connections()
+def fetch_emails():
+    try:
+        # Conectar a IMAP
+        mail = imaplib.IMAP4_SSL(IMAP_SERVER)
+        mail.login(EMAIL, PASSWORD)
+        mail.select("inbox")  # Seleccionar la bandeja de entrada
+        
+        while True:
+            _, data = mail.search(None, "UNSEEN")  # Buscar correos no leídos
 
+            if not data[0]:  # Si no hay correos nuevos
+                print("🛑 No hay correos nuevos para procesar.")
+            else:
+                for num in data[0].split():
+                    _, msg_data = mail.fetch(num, "(RFC822)")
+                    raw_email = msg_data[0][1]
+                    email_message = email.message_from_bytes(raw_email)
 
+                    # Extraer los campos relevantes
+                    email_data = {
+                        "id": num.decode(),
+                        "from": email_message["From"],
+                        "subject": email_message["Subject"],
+                        "body": get_body(email_message),
+                        "received_at": str(email_message["Date"])
+                    }
+                    
+                    # Enviar a Kafka
+                    producer.send("raw_emails", value=email_data)
+                    print(f"📩 Email {num} enviado a Kafka")
+            
+            sleep(60)  # Espera 1 minuto antes de revisar nuevamente
 
-# import imaplib
-
-# # Información de conexión
-# IMAP_SERVER = 'imap.gmail.com'
-# EMAIL = 'procesamiento34@gmail.com'
-# PASSWORD = 'xgyk jcza kgdd xtzf'
-
-# # Conectar al servidor IMAP de Gmail
-# mail = imaplib.IMAP4_SSL(IMAP_SERVER)
-
-# try:
-#     # Iniciar sesión en la cuenta de Gmail
-#     mail.login(EMAIL, PASSWORD)
-#     print("Conexión exitosa")
-# except imaplib.IMAP4.error as e:
-#     print(f"Error al conectar: {e}")
-# finally:
-#     # Cerrar la conexión
-#     mail.logout()
+    except Exception as e:
+        print(f"❌ Error: {e}")
 
