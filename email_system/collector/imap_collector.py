@@ -1,10 +1,21 @@
 import imaplib
 import email
 import json
+import os
 from kafka import KafkaProducer
 from time import sleep
 from concurrent.futures import ThreadPoolExecutor
-from config import IMAP_SERVER, EMAIL, PASSWORD, KAFKA_SERVER
+from dotenv import load_dotenv
+# from config import IMAP_SERVER, EMAIL, PASSWORD, KAFKA_SERVER
+
+
+# Cargar variables de entorno desde el archivo .env
+load_dotenv()
+
+IMAP_SERVER = os.getenv("IMAP_SERVER")
+EMAIL = os.getenv("EMAIL")
+PASSWORD = os.getenv("PASSWORD")
+KAFKA_SERVER = os.getenv("KAFKA_SERVER")
 
 # Configurar el productor de Kafka
 producer = KafkaProducer(
