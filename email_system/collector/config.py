@@ -1,4 +1,4 @@
 IMAP_SERVER = "imap.gmail.com"
-EMAIL = "tu_email@gmail.com"
-PASSWORD = "tu_password"  
+EMAIL = "procesamiento34@gmail.com"
+PASSWORD = "xgyk jcza kgdd xtzf"  
 KAFKA_SERVER = "localhost:9092"

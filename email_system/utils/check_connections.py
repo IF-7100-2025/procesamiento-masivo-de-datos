@@ -1,3 +1,4 @@
+
 import imaplib
 import json
 import os
@@ -47,3 +48,26 @@ def check_connections():
 
 if __name__ == "__main__":
     check_connections()
+
+
+
+# import imaplib
+
+# # Información de conexión
+# IMAP_SERVER = 'imap.gmail.com'
+# EMAIL = 'procesamiento34@gmail.com'
+# PASSWORD = 'xgyk jcza kgdd xtzf'
+
+# # Conectar al servidor IMAP de Gmail
+# mail = imaplib.IMAP4_SSL(IMAP_SERVER)
+
+# try:
+#     # Iniciar sesión en la cuenta de Gmail
+#     mail.login(EMAIL, PASSWORD)
+#     print("Conexión exitosa")
+# except imaplib.IMAP4.error as e:
+#     print(f"Error al conectar: {e}")
+# finally:
+#     # Cerrar la conexión
+#     mail.logout()
+
