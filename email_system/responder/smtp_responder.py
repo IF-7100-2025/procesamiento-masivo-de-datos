@@ -4,7 +4,6 @@ from email.mime.multipart import MIMEMultipart
 from jinja2 import Template
 import json
 from kafka import KafkaConsumer
-from config import SMTP_CONFIG, KAFKA_SERVER
 import logging
 from dotenv import load_dotenv
 import os
@@ -14,6 +13,8 @@ logger = logging.getLogger(__name__)
 
 
 load_dotenv()
+
+KAFKA_SERVER = os.getenv("KAFKA_SERVER", "localhost:9092")  
 
 SMTP_CONFIG = {
     "server": os.getenv("SMTP_SERVER"),
