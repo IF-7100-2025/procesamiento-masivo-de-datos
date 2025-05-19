@@ -14,31 +14,31 @@ producer = KafkaProducer(
 test_emails = [
     {
         "id": "email-001",
-        "from": "juan@correo.com",
+        "from": "luisballar123@gmail.com",
         "subject": "Suscripción al newsletter",
         "body": "Hola, quiero suscribirme al newsletter de Daily Planet"
     },
     {
         "id": "email-002",
-        "from": "ana@correo.com",
+        "from": "luisballar123@gmail.com",
         "subject": "Consulta sobre precios",
         "body": "Quisiera saber los precios de sus publicaciones"
     },
     {
         "id": "email-003",
-        "from": "luis@correo.com",
+        "from": "luisballar123@gmail.com",
         "subject": "Reclamo por error en artículo",
         "body": "El artículo de hoy tiene datos incorrectos, por favor revisar"
     },
     {
         "id": "email-004",
-        "from": "maria@correo.com",
+        "from": "luisballar123@gmail.com",
         "subject": "Tengo una queja urgente",
         "body": "Me parece muy mal lo publicado sobre mi ciudad"
     },
     {
         "id": "email-005",
-        "from": "carla@correo.com",
+        "from": "luisballar123@gmail.com",
         "subject": "Felicitaciones por el reportaje",
         "body": "Excelente cobertura del evento político"
     }

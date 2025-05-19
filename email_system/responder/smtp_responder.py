@@ -6,9 +6,23 @@ import json
 from kafka import KafkaConsumer
 from config import SMTP_CONFIG, KAFKA_SERVER
 import logging
+from dotenv import load_dotenv
+import os
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+load_dotenv()
+
+SMTP_CONFIG = {
+    "server": os.getenv("SMTP_SERVER"),
+    "port": int(os.getenv("SMTP_PORT")),
+    "user": os.getenv("SMTP_USER"),
+    "password": os.getenv("SMTP_PASSWORD"),
+    "sender_email": "procesamiento34@gmail.com"
+}
+
 
 def load_template():
     with open("templates/acknowledgment.html", "r") as f:

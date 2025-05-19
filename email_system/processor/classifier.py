@@ -18,7 +18,7 @@ def classify_email(email_data):
     for category, rules in CLASSIFICATION_RULES.items():
         if any(keyword in subject or keyword in body for keyword in rules["keywords"]):
             return category
-    return "acknowledgement_queue"  # Categoría por defecto
+    return None  # No clasificado en categoría específica
 
 def main():
     consumer = KafkaConsumer(
@@ -36,9 +36,17 @@ def main():
     for message in consumer:
         try:
             email_data = message.value
-            topic = classify_email(email_data)
-            producer.send(topic, value=email_data)
-            logger.info(f"Clasificado email ID {email_data['id']} → {topic}")
+            category_topic = classify_email(email_data)
+
+            # Enviar siempre a acknowledgement_queue para acuse rápido
+            producer.send("acknowledgement_queue", value=email_data)
+            logger.info(f"Enviado email ID {email_data['id']} a acknowledgement_queue")
+
+            # Si clasificó en categoría, enviar también a ese topic
+            if category_topic:
+                producer.send(category_topic, value=email_data)
+                logger.info(f"Clasificado email ID {email_data['id']} → {category_topic}")
+
         except json.JSONDecodeError:
             logger.error("Error decodificando el mensaje de Kafka")
         except Exception as e:

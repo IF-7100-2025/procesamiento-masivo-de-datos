@@ -1,11 +1,16 @@
 KAFKA_SERVER = "localhost:9092"
 
-# Reglas de clasificación (personalizables)
 CLASSIFICATION_RULES = {
-    "acknowledgement_queue": {
-        "keywords": ["suscripción", "subscribe", "newsletter", "consulta"]
+    "subscriptions": {
+        "keywords": ["suscripción", "newsletter", "suscribirme"]
     },
-    "human_review": {
-        "keywords": ["queja", "reclamo", "urgente", "complaint", "error"]
+    "complaints": {
+        "keywords": ["reclamo", "queja", "error", "mal", "urgente"]
+    },
+    "praises": {
+        "keywords": ["felicitaciones", "excelente", "bien hecho", "cobertura"]
+    },
+    "questions": {
+        "keywords": ["consulta", "saber", "precios", "cuánto"]
     }
 }
