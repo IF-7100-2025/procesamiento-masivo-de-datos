@@ -16,7 +16,7 @@ MSc. Leonardo Camacho
 **Estudiantes:**  
 Luis Mario Ballar Zamora - C20937
 Luis Daniel Solano Solano - C17640
-Jean Carlo Zuñiga
+Jean Carlo Calderón Rojas - C21509
 
 **I Semestre 2025**
 
