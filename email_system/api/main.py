@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from prometheus_client import make_asgi_app, Counter, Gauge
 from dotenv import load_dotenv
 import os
-from routers import metrics, health
+from api.routers import metrics, health
 
 # Cargar las variables de entorno desde el archivo .env
 load_dotenv()
