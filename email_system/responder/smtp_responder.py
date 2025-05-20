@@ -39,7 +39,7 @@ def send_acknowledgment(email_data):
     msg = MIMEMultipart()
     msg["From"] = SMTP_CONFIG["sender_email"]
     msg["To"] = email_data["from"]
-    msg["Subject"] = "✅ Confirmación de recepción"
+    msg["Subject"] = " Confirmación de recepción"
     msg.attach(MIMEText(html_content, "html"))
 
     try:
@@ -47,9 +47,9 @@ def send_acknowledgment(email_data):
             server.starttls()
             server.login(SMTP_CONFIG["user"], SMTP_CONFIG["password"])
             server.send_message(msg)
-        logger.info(f"📤 Respuesta enviada a {email_data['from']}")
+        logger.info(f" Respuesta enviada a {email_data['from']}")
     except Exception as e:
-        logger.error(f"❌ Error enviando email: {e}")
+        logger.error(f" Error enviando email: {e}")
 
 def main():
     consumer = KafkaConsumer(

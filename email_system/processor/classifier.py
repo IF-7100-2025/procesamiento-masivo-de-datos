@@ -3,7 +3,6 @@ import logging
 from kafka import KafkaConsumer, KafkaProducer
 from config import KAFKA_SERVER, CLASSIFICATION_RULES
 
-# Configura logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -18,7 +17,7 @@ def classify_email(email_data):
     for category, rules in CLASSIFICATION_RULES.items():
         if any(keyword in subject or keyword in body for keyword in rules["keywords"]):
             return category
-    return None  # No clasificado en categoría específica
+    return None  
 
 def main():
     consumer = KafkaConsumer(

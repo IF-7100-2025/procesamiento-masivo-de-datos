@@ -9,7 +9,6 @@ from dotenv import load_dotenv
 # from config import IMAP_SERVER, EMAIL, PASSWORD, KAFKA_SERVER
 
 
-# Cargar variables de entorno desde el archivo .env
 load_dotenv()
 
 IMAP_SERVER = os.getenv("IMAP_SERVER")
@@ -59,7 +58,7 @@ def process_email(num, mail):
         mail.store(num, '+FLAGS', '\\Seen')
 
     except Exception as e:
-        print(f"❌ Error procesando email {num}: {e}")
+        print(f" Error procesando email {num}: {e}")
 
 def fetch_emails():
     while True:
@@ -70,7 +69,7 @@ def fetch_emails():
 
             status, data = mail.search(None, "UNSEEN")
             if status != "OK":
-                print("❌ Error al buscar correos")
+                print(" Error al buscar correos")
                 mail.logout()
                 sleep(10)
                 continue
@@ -90,7 +89,7 @@ def fetch_emails():
             sleep(5)
 
         except Exception as e:
-            print(f"❌ Error general: {e}")
+            print(f" Error general: {e}")
             sleep(30)
 
 if __name__ == "__main__":

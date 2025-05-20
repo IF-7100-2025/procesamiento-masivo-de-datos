@@ -4,15 +4,13 @@ from dotenv import load_dotenv
 import os
 from api.routers import metrics, health
 
-# Cargar las variables de entorno desde el archivo .env
+
 load_dotenv()
 
-# Ahora puedes acceder a las variables con os.getenv()
 imap_server = os.getenv("IMAP_SERVER")
 smtp_user = os.getenv("SMTP_USER")
 kafka_server = os.getenv("KAFKA_SERVER")
 
-# Crear la aplicación FastAPI
 app = FastAPI(title="Email Processing Metrics")
 
 # Métricas Prometheus
@@ -32,6 +30,5 @@ RESPONSE_TIME = Gauge(
     ["topic"]
 )
 
-# Incluye routers
 app.include_router(metrics.router)
 app.include_router(health.router)
