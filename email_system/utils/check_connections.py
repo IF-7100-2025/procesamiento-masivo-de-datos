@@ -28,15 +28,14 @@ def check_kafka_connection():
             bootstrap_servers=KAFKA_SERVER,
             value_serializer=lambda x: json.dumps(x).encode("utf-8")
         )
-        # Enviar un mensaje de prueba
+        
         producer.send('test_topic', value={'status': 'test'})
-        producer.flush()  # Asegura que el mensaje sea enviado
+        producer.flush()  
         print(" Conexión a Kafka exitosa")
         producer.close()
     except Exception as e:
         print(f"Error al conectar a Kafka: {e}")
 
-# Ejecutar las verificaciones
 def check_connections():
     print(" Verificando conexiones...")
     check_imap_connection()
@@ -52,7 +51,7 @@ def fetch_emails():
         mail.select("inbox")  
         
         while True:
-            _, data = mail.search(None, "UNSEEN")  # Buscar correos no leídos
+            _, data = mail.search(None, "UNSEEN")  # Busca los correos no leídos
 
             if not data[0]:  
                 print(" No hay correos nuevos para procesar.")
@@ -62,7 +61,7 @@ def fetch_emails():
                     raw_email = msg_data[0][1]
                     email_message = email.message_from_bytes(raw_email)
 
-                    # Extraer los campos relevantes
+                    # Se extraen los campos relevantes
                     email_data = {
                         "id": num.decode(),
                         "from": email_message["From"],
