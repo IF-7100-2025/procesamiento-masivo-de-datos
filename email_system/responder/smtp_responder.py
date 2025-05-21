@@ -26,7 +26,9 @@ SMTP_CONFIG = {
 
 
 def load_template():
-    with open("templates/acknowledgment.html", "r") as f:
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    template_path = os.path.join(base_path, "templates", "acknowledgment.html")
+    with open(template_path, "r") as f:
         return Template(f.read())
 
 def send_acknowledgment(email_data):
