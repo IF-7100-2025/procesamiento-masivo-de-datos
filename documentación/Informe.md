@@ -354,6 +354,8 @@ tests/
 
 _Esta sección se completará durante la fase de implementación del sistema, incluyendo los resultados específicos obtenidos en cada tipo de prueba._
 
+
+
 ## **7. Conclusiones y Recomendaciones**
 
 ### **7.1 Conclusión General: Eficacia de la Arquitectura Distribuida**

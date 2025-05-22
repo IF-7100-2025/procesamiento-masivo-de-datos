@@ -4,10 +4,8 @@ import json
 import os
 from kafka import KafkaProducer
 from time import sleep
-from concurrent.futures import ThreadPoolExecutor
+from email.header import decode_header
 from dotenv import load_dotenv
-# from config import IMAP_SERVER, EMAIL, PASSWORD, KAFKA_SERVER
-
 
 load_dotenv()
 
@@ -20,6 +18,15 @@ producer = KafkaProducer(
     bootstrap_servers=KAFKA_SERVER,
     value_serializer=lambda x: json.dumps(x).encode("utf-8")
 )
+
+def decode_mime_words(header):
+    if header:
+        parts = decode_header(header)
+        return ''.join([
+            part.decode(encoding or 'utf-8', errors='ignore') if isinstance(part, bytes) else part
+            for part, encoding in parts
+        ])
+    return ''
 
 def get_body(email_message):
     if email_message.is_multipart():
@@ -40,8 +47,8 @@ def process_email(num, mail):
 
         email_data = {
             "id": num.decode(),
-            "from": email_message["From"],
-            "subject": email_message["Subject"],
+            "from": decode_mime_words(email_message["From"]),
+            "subject": decode_mime_words(email_message["Subject"]),
             "body": body,
             "received_at": str(email_message["Date"])
         }
@@ -53,7 +60,7 @@ def process_email(num, mail):
 
         print(f" Correo con ID {email_data['id']} enviado al topic 'raw_emails' de Kafka.")
 
-        # Se marca como leído para no procesar otra vez
+        # Marcar como leído
         mail.store(num, '+FLAGS', '\\Seen')
 
     except Exception as e:
@@ -80,9 +87,8 @@ def fetch_emails():
                 sleep(10)
                 continue
 
-            with ThreadPoolExecutor(max_workers=10) as executor:
-                for num in nums:
-                    executor.submit(process_email, num, mail)
+            for num in nums:
+                process_email(num, mail)
 
             mail.logout()
             sleep(5)
