@@ -352,9 +352,6 @@ tests/
 
 ## 6. Ejecución de Pruebas
 
-_Esta sección se completará durante la fase de implementación del sistema, incluyendo los resultados específicos obtenidos en cada tipo de prueba._
-
-
 
 ## **7. Conclusiones y Recomendaciones**
 
