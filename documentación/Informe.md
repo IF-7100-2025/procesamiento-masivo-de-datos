@@ -73,7 +73,6 @@ log.retention.hours=168
 
 ![Kafka y Zookeper](imagenes/2.png "Kafka y Zookeper")
 
-
 ### 2.3 Python
 
 **Lenguaje principal** para los componentes del sistema.
@@ -154,7 +153,6 @@ Los correos son recibidos y encolados en Kafka, donde múltiples consumidores lo
 ### 4.1 Arquitectura General
 
 ![Arquitecturea](imagenes/1.png "Sistema Daily Planet")
-
 
 ### 4.2 Componentes Clave
 
@@ -352,9 +350,34 @@ tests/
 
 ## 6. Ejecución de Pruebas
 
-_Esta sección se completará durante la fase de implementación del sistema, incluyendo los resultados específicos obtenidos en cada tipo de prueba._
+**Pruebas de Collector**:
 
+- **Prueba mandando correos de forma masiva al servidor Kafka**
+  ![Test correos collector](imagenes/test_processor.jpg "Test correos collector")
 
+- **Prueba de la confirmación de recepción de email del servidor Kafka**
+  ![Prueba collector](imagenes/processor_image_test.jpg "Prueba collector")
+
+**Pruebas de Processor**:
+
+- **Prueba de la clasificación que recibe cada correo**
+  ![Clasificación de correos](imagenes/processor.png "Clasificación de correos")
+
+**Pruebas de Responder**:
+
+- **Pruebas del envió de una respuesta automática a cada email recibido**
+  ![Resultado de responder](imagenes/responder.png "Resultado de responder")
+
+- **Confirmación que obtiene el usuario en su email por parte del sistema**
+  ![Confirmación del responder](imagenes/responder2.png "Confirmación del responder")
+
+**Pruebas de FastAPI**:
+
+- **Resultado de la métrica /stats que muestra la cantidad de emails recibidos por el sistema que se clasificaron como raw_emails o acknowledged**
+  ![Resultado de la metrica /stats](imagenes/fastapi2.jpeg "Resultado de la metrica /stats")
+
+  - **Resultado de la métrica health que muestra el estado de los servicios levantados**
+    ![Resultado de la metrica /health](imagenes/fastapi.png "Resultado de la metrica /health")
 
 ## **7. Conclusiones y Recomendaciones**
 
