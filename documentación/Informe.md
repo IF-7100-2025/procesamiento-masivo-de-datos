@@ -379,6 +379,7 @@ tests/
   - **Resultado de la métrica health que muestra el estado de los servicios levantados**
     ![Resultado de la metrica /health](imagenes/fastapi.png "Resultado de la metrica /health")
 
+
 ## **7. Conclusiones y Recomendaciones**
 
 ### **7.1 Conclusión General: Eficacia de la Arquitectura Distribuida**
