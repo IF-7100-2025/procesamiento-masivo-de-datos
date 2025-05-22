@@ -3,7 +3,6 @@ import logging
 from kafka import KafkaConsumer, KafkaProducer
 from config import KAFKA_SERVER, CLASSIFICATION_RULES
 
-# Configura logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -18,7 +17,7 @@ def classify_email(email_data):
     for category, rules in CLASSIFICATION_RULES.items():
         if any(keyword in subject or keyword in body for keyword in rules["keywords"]):
             return category
-    return None  # No clasificado en categoría específica
+    return None  
 
 def main():
     consumer = KafkaConsumer(
@@ -38,11 +37,10 @@ def main():
             email_data = message.value
             category_topic = classify_email(email_data)
 
-            # Enviar siempre a acknowledgement_queue para acuse rápido
             producer.send("acknowledgement_queue", value=email_data)
             logger.info(f"Enviado email ID {email_data['id']} a acknowledgement_queue")
 
-            # Si clasificó en categoría, enviar también a ese topic
+            # Si clasificó en categoría, se envia también a ese topic
             if category_topic:
                 producer.send(category_topic, value=email_data)
                 logger.info(f"Clasificado email ID {email_data['id']} → {category_topic}")
