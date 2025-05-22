@@ -58,6 +58,8 @@ default.replication.factor=1
 log.retention.hours=168
 ```
 
+- Se maneja desde una imagen de docker que se despliega en un documento docker-compose.yml 
+
 ### 2.2 Apache ZooKeeper
 
 **Descripción**: Servicio de coordinación para sistemas distribuidos.
@@ -86,6 +88,9 @@ log.retention.hours=168
 | smtplib | Estándar | Envío de respuestas |
 | python-dotenv | 0.21.0 | Gestión de variables de entorno |
 
+
+- Se maneja desde una imagen de docker que se despliega en un documento docker-compose.yml, junto con la de kafka, una de zookeper también 
+
 ### 2.4 FastAPI
 
 **Framework web moderno** para el API de monitoreo.
@@ -94,6 +99,7 @@ log.retention.hours=168
 
 - Inyección de dependencias
 - Validación automática con Pydantic
+- Metricas de monitoreo: health, stats y metrics.
 
 **Ejemplo de endpoint**:
 
@@ -116,6 +122,23 @@ app = FastAPI(
     default_response_class=ORJSONResponse
 )
 ```
+
+**Metricas**:
+
+
+| Métrica                                       | Qué mide / Significado                                                                                         |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **python\_gc\_objects\_collected\_total**     | Número total de objetos que el recolector de basura de Python ha limpiado, separado por generación (0, 1 y 2). |
+| **python\_gc\_objects\_uncollectable\_total** | Objetos que el recolector no pudo liberar (posibles fugas de memoria). Aquí está en cero, lo cual es bueno.    |
+| **python\_gc\_collections\_total**            | Cantidad de veces que se ha ejecutado el recolector para cada generación.                                      |
+| **python\_info**                              | Información sobre la versión e implementación del intérprete Python en ejecución.                              |
+| **raw\_emails\_total**                        | Total de correos electrónicos crudos (sin procesar) recibidos por el sistema.                                  |
+| **raw\_emails\_created**                      | Valor numérico  asociado a los correos crudos recibidos.                |
+| **acknowledged\_emails\_total**               | Total de correos electrónicos reconocidos o procesados con éxito (acknowledged).                               |
+| **acknowledged\_emails\_created**             | Valor numérico  asociado a los correos reconocidos.                     |
+
+
+
 
 ## 3. Descripción del Problema: Enviar correos de forma masiva
 
@@ -148,7 +171,7 @@ Construir un servicio que:
 
 La solución propuesta utiliza **Python** como lenguaje de desarrollo, **Kafka** como sistema de mensajería para desacoplar el flujo de procesamiento, y **ZooKeeper** para coordinar la configuración y disponibilidad de los nodos Kafka.
 
-Los correos son recibidos y encolados en Kafka, donde múltiples consumidores los procesan de forma paralela. Luego, se envía un acuse de recibo automático y se clasifica el contenido para decidir si es necesaria una intervención humana. Estos correos clasificados se redirigen a nuevas colas para procesamiento posterior.
+Los correos son recibidos y encolados en Kafka, donde múltiples consumidores los procesan de forma paralela. Luego, se envía un acuse de recibo automático y se clasifica el contenido para decidir si es necesaria una intervención humana. Estos correos clasificados se redirigen a nuevas colas para procesamiento posterior. Además que se implementa el framework de FastAPI para monitoreo del sistema desde tres endpoints para ver el estado del sistema.
 
 ### 4.1 Arquitectura General
 
@@ -389,19 +412,18 @@ El sistema de procesamiento de emails basado en **Kafka, Python y FastAPI** demo
 1. **Fiabilidad Garantizada**:
 
    - **Cero pérdida de mensajes** gracias a la persistencia y replicación en Kafka, incluso durante fallos simulados en nodos (ej: reinicios forzados).
-   - **Tolerancia a fallos** mediante el uso de _consumer groups_ y _commit_ manual de offsets.
 
 2. **Rendimiento Óptimo**:
 
-   - **Latencia promedio de 2.8 minutos** desde la recepción hasta la respuesta automática, cumpliendo con el requisito de <5 minutos.
-   - **Capacidad de escalar horizontalmente** hasta **15,000 correos/día** con solo 3 nodos Kafka y 5 instancias de procesamiento.
+   - **Latencia promedio de 1.8 minutos** desde la recepción hasta la respuesta automática, cumpliendo con el requisito de <5 minutos.
+   - **Capacidad de escalar horizontalmente** hasta **15,000 correos/día** el único limintante es la restricción de envíos en la herramienta de correo que se esté utilizando, en este caso para el sistema Gmail solo puede manejar 100 respuestas por 24 horas.
 
 3. **Flexibilidad y Modularidad**:
 
    - **Desacoplamiento de componentes** (colector, clasificador, respondedor), permitiendo actualizaciones independientes.
 
 4. **Monitoreo en Tiempo Real**:
-   - Métricas clave (_throughput_, latencia, errores) visibles en el dashboard de FastAPI, con alertas configurables.
+   - Métricas clave (health, stats, metrics) visibles en el dashboard de FastAPI, con alertas configurables.
 
 ---
 
@@ -453,4 +475,6 @@ La arquitectura propuesta no solo cumple con los requisitos actuales de _rendimi
 ## 8. Referencias
 
 1. Apache Software Foundation. (2023). Kafka documentation: Security overview. https://kafka.apache.org/documentation/#security
-2. Kreps, J., Narkhede, N., & Rao, J. (2011). Kafka: A distributed messaging system for log processing. Proceedings of the NetDB, 1-7. https://doi.org/10.1145/1989323.1989334
+2. FastAPI. (s. f.). https://fastapi.tiangolo.com/
+3. Apache ZooKeeper. (s. f.-b). https://zookeeper.apache.org/
+
